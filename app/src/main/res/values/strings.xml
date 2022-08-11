@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">BookNews</string>
+    <string name="home">Home</string>
+    <string name="api_key"> </string>
+    <string name="title_splash">\t\t\tRead your\n favorite hero</string>
+    <string name="content_splash">All of your favorite hero are \n\t\t\t\t\t\talready here</string>
+    <string name="title_main_hero">Information about Hero here</string>
+    <string name="create_by_with_publisher">Create by with publisher</string>
+</resources>

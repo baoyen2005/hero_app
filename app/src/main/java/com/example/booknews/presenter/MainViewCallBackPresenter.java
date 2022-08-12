@@ -24,6 +24,7 @@ public class MainViewCallBackPresenter implements MainActivityContract.CallBackP
         getHeroes();
         this.callBackView.setupUI();
         this.callBackView.handleEvent();
+       // getSlideModels();
 
     }
 
@@ -46,7 +47,7 @@ public class MainViewCallBackPresenter implements MainActivityContract.CallBackP
 
     @Override
     public void onSuccess(Response<List<Hero>> response) {
-        if (response != null && response.isSuccessful()) {
+        if (response != null && response.body() != null && !response.body().isEmpty()) {
             callBackView.hideProgressDialog();
             callBackView.displayHeroData(response.body());
         } else {
@@ -90,6 +91,7 @@ public class MainViewCallBackPresenter implements MainActivityContract.CallBackP
     @Override
     public void onSuccess(ArrayList<SlideModel> slideModels) {
         if(slideModels != null &&  !slideModels.isEmpty()){
+            Log.d(TAG, "onSuccess: SlideModel "+ slideModels.size());
             callBackView.setSlider(slideModels);
         }
         else {

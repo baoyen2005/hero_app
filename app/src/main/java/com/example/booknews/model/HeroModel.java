@@ -19,6 +19,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class HeroModel implements MainActivityContract.CallBackModel {
+    private final String TAG ="HeroModel";
     private final List<Hero> heroes = new ArrayList<>();
     private final List<Hero> list = new ArrayList<>();
     private final ArrayList<SlideModel> slideModels = new ArrayList<>();
@@ -36,6 +37,7 @@ public class HeroModel implements MainActivityContract.CallBackModel {
                         listener.onSuccess(response);
                         assert response.body() != null;
                         heroes.addAll(response.body());
+                        Log.d(TAG, "onResponse: heroes "+heroes.size());
                     } else {
                         listener.onError(response);
                     }
@@ -52,6 +54,7 @@ public class HeroModel implements MainActivityContract.CallBackModel {
 
     @Override
     public void getHeroesByName(String name, MainActivityContract.CallBackSearchHeroes listener) {
+        Log.d(TAG, "getHeroesByName: heroes = "+ heroes.size());
         if (name == null || name.isEmpty()) {
             listener.onFailureSearch(heroes);
         }
@@ -69,12 +72,14 @@ public class HeroModel implements MainActivityContract.CallBackModel {
     @Override
     public void getSlideModels(MainActivityContract.CallBackSliderModel callBackSliderModel) {
         if(!heroes.isEmpty()){
+            Log.d("HeroModel", "getSlideModels: " + heroes.size());
             for (Hero hero : heroes) {
                 slideModels.add(new SlideModel(hero.getImageurl(), ScaleTypes.FIT));
             }
             callBackSliderModel.onSuccess(slideModels);
         }
         else{
+            Log.d("HeroModel", "getSlideModels: is empty " + heroes);
             callBackSliderModel.onError("Heroes is empty. slideModels is fail");
         }
     }

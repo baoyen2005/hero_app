@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -44,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         adapter = new HeroMainAdapter(new AdapterItemEvent());
         callBackPresenter = new MainViewCallBackPresenter(new EventView(MainActivity.this));
-      //  callBackPresenter.getHeroes();
+        Handler handler = new Handler();
+        handler.postDelayed(() -> callBackPresenter.getSlideModels(), 5000);
     }
 
     private void initView() {
@@ -88,8 +91,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void displayHeroData(@NonNull List<Hero> heroes) {
             if (!heroes.isEmpty()) {
+                Log.d(TAG, "displayHeroData: "+ heroes.size());
                 adapter.updateList(heroes);
             } else {
+                Log.d(TAG, "displayHeroData: fail ");
                 showMessage("data is empty");
             }
         }
@@ -138,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void openDetailHero(Hero hero, int position) {
             DetailActivity.started(MainActivity.this, hero);
-            finish();
         }
     }
 

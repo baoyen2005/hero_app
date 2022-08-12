@@ -59,7 +59,7 @@ public class HeroMainAdapter extends RecyclerView.Adapter<HeroMainAdapter.ViewHo
 
     @SuppressLint("NotifyDataSetChanged")
     public void updateList(List<Hero> list) {
-        if (!heroes.isEmpty() && list != null && !list.isEmpty()) {
+        if (list != null && !list.isEmpty()) {
             heroes.clear();
             heroes.addAll(list);
             notifyDataSetChanged();

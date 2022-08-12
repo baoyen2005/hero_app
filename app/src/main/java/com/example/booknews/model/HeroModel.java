@@ -4,6 +4,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
+import com.denzcoskun.imageslider.constants.ScaleTypes;
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.booknews.model.entity.Hero;
 import com.example.booknews.model.network.RetrofitClass;
 import com.example.booknews.presenter.inteface.HeroApiInterface;
@@ -15,64 +17,65 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
-public class HeroModel implements MainActivityContract.Model {
-    private final String TAG = "HeroModel";
-    private final List<Hero> heroList = new ArrayList<>();
+public class HeroModel implements MainActivityContract.CallBackModel {
+    private final List<Hero> heroes = new ArrayList<>();
     private final List<Hero> list = new ArrayList<>();
+    private final ArrayList<SlideModel> slideModels = new ArrayList<>();
 
     @Override
-    public void getBooks(MainActivityContract.APIListener listener) {
+    public void getHeroes(MainActivityContract.APIListener listener) {
         try {
-
-            // 1. Create a Retrofit client and using the interface make the call
-
             HeroApiInterface service = RetrofitClass.getInstance().create(HeroApiInterface.class);
-
             Call<List<Hero>> call = service.getAllHero();
+            Log.d("heroModel", "getHeroes: call "+ call);
             call.enqueue(new Callback<List<Hero>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Hero>> call, @NonNull Response<List<Hero>> response) {
-
                     if (response.isSuccessful()) {
                         listener.onSuccess(response);
                         assert response.body() != null;
-                        heroList.addAll(response.body());
+                        heroes.addAll(response.body());
                     } else {
                         listener.onError(response);
                     }
                 }
-
                 @Override
                 public void onFailure(@NonNull Call<List<Hero>> call, Throwable t) {
-
                     listener.onFailure(t);
                 }
             });
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void getBooksByName(String name, MainActivityContract.SearchListHeroListener listener) {
-        Log.i(TAG, "getBooksByName: name = " + name);
-
+    public void getHeroesByName(String name, MainActivityContract.CallBackSearchHeroes listener) {
         if (name == null || name.isEmpty()) {
-            listener.onFailureSearch(heroList);
+            listener.onFailureSearch(heroes);
         }
         else {
             list.clear();
-            for (int i = 0; i < heroList.size(); i++) {
-                if (heroList.get(i).getName().toLowerCase().contains(name.toLowerCase())) {
-                    list.add(heroList.get(i));
+            for (int i = 0; i < heroes.size(); i++) {
+                if (heroes.get(i).getName().toLowerCase().contains(name.toLowerCase())) {
+                    list.add(heroes.get(i));
                 }
             }
             listener.onSuccessfullySearch(list);
-            Log.i(TAG, "getBooksByName: list.size "+ list.size());
+        }
+    }
+
+    @Override
+    public void getSlideModels(MainActivityContract.CallBackSliderModel callBackSliderModel) {
+        if(!heroes.isEmpty()){
+            for (Hero hero : heroes) {
+                slideModels.add(new SlideModel(hero.getImageurl(), ScaleTypes.FIT));
+            }
+            callBackSliderModel.onSuccess(slideModels);
+        }
+        else{
+            callBackSliderModel.onError("Heroes is empty. slideModels is fail");
         }
     }
 }

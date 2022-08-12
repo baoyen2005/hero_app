@@ -2,11 +2,13 @@ package com.example.booknews.view.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -18,64 +20,65 @@ import com.example.booknews.model.entity.Hero;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
-public class HeroMainAdapter extends RecyclerView.Adapter<HeroMainAdapter.BookViewHolder> {
+public class HeroMainAdapter extends RecyclerView.Adapter<HeroMainAdapter.ViewHolder> {
+    private final List<Hero> heroes = new ArrayList<>();
+    private final ClickShowDetailHero clickShowDetailHero;
 
-
-    private final Context mCtx;
-    private  List<Hero> heroList = new ArrayList<>();
-    private OnItemClickListener onItemClickListener;
-
-    public HeroMainAdapter(Context mCtx, OnItemClickListener onItemClickListener) {
-        this.mCtx = mCtx;
-        this.onItemClickListener = onItemClickListener;
+    public HeroMainAdapter(ClickShowDetailHero clickShowDetailHero) {
+        this.clickShowDetailHero = clickShowDetailHero;
     }
 
     @NonNull
     @Override
-    public BookViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mCtx).inflate(R.layout.recyclerview_layout_item, parent, false);
-        return new BookViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Context context = parent.getContext();
+        View view = LayoutInflater.from(context).inflate(R.layout.recyclerview_layout_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull BookViewHolder holder, int position) {
-        Hero hero = heroList.get(position);
-
-        Glide.with(mCtx)
-                .load(hero.getImageurl())
-                .into(holder.imageView);
-        holder.textView.setText(hero.getName());
-        holder.constraintItem.setOnClickListener(view ->{
-            onItemClickListener.onItemClick(hero,position);
-        });
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Context context = holder.constraintItem.getContext();
+        if (!heroes.isEmpty()) {
+            Hero hero = heroes.get(position);
+            Glide.with(context)
+                    .load(hero.getImageurl())
+                    .into(holder.imageView);
+            holder.textView.setText(hero.getName());
+            holder.constraintItem.setOnClickListener(view -> clickShowDetailHero.openDetailHero(hero, position));
+        } else {
+            Toast.makeText(context, "List hero is empty", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
     public int getItemCount() {
-        return heroList.size();
+        return heroes.size();
     }
 
-    public interface OnItemClickListener{
-        void onItemClick(Hero hero,int position);
-    }
-    
     @SuppressLint("NotifyDataSetChanged")
-    public void updateList(List<Hero> list){
-        heroList.clear();
-        heroList.addAll(list);
-        notifyDataSetChanged();
+    public void updateList(List<Hero> list) {
+        if (!heroes.isEmpty() && list != null && !list.isEmpty()) {
+            heroes.clear();
+            heroes.addAll(list);
+            notifyDataSetChanged();
+        } else {
+            Log.d("adapter", "updateList: list null or heroes null");
+        }
     }
 
-    protected static class BookViewHolder extends RecyclerView.ViewHolder {
+    public interface ClickShowDetailHero {
+        void openDetailHero(Hero hero, int position);
+    }
 
-        ImageView imageView;
-        TextView textView;
-        ConstraintLayout constraintItem;
-        public BookViewHolder(View itemView) {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
+        protected ImageView imageView;
+        protected TextView textView;
+        private final ConstraintLayout constraintItem;
+
+        public ViewHolder(View itemView) {
             super(itemView);
-
             imageView = itemView.findViewById(R.id.imageView);
             textView = itemView.findViewById(R.id.textView);
             constraintItem = itemView.findViewById(R.id.constraintItem);

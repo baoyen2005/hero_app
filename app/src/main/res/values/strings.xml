@@ -6,4 +6,7 @@
     <string name="content_splash">All of your favorite hero are \n\t\t\t\t\t\talready here</string>
     <string name="title_main_hero">Information about Hero here</string>
     <string name="create_by_with_publisher">Create by with publisher</string>
+    <string name="first_appearance">First Appearance: </string>
+    <string name="real_name">Real name: </string>
+    <string name="team"> (Team: </string>
 </resources>

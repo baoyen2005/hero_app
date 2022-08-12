@@ -1,45 +1,63 @@
 package com.example.booknews.presenter.inteface;
 
+import com.denzcoskun.imageslider.models.SlideModel;
 import com.example.booknews.model.entity.Hero;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Response;
 
 public interface MainActivityContract {
-    interface Model {
-        void getBooks(final APIListener listener);	// Retrieve list of movies
-        void getBooksByName(String name,SearchListHeroListener listener);
+    interface CallBackModel {
+        void getHeroes(final APIListener listener);
+
+        void getHeroesByName(String name, CallBackSearchHeroes listener);
+
+        void getSlideModels(CallBackSliderModel callBackSliderModel);
+
     }
 
-    interface View {
-
+    interface CallBackView {
         void setupUI();
-        void handleEvent();
-        void displayHeroData(List<Hero> heroesList);
-        void showMessage(String msg);	// To display message as Toast messages
 
-        // Show and hide progress dialog
+        void handleEvent();
+
+        void displayHeroData(List<Hero> heroes);
+
+        void setSlider(ArrayList<SlideModel> slideModels);
+
+        void showMessage(String msg);
+
         void showProgressDialog();
+
         void hideProgressDialog();
     }
 
-    interface Presenter {
+    interface CallBackPresenter {
         void getHeroes();
-        void getHeroesByName(String name, SearchListHeroListener listener);
+
+        void getHeroesByName(String name, CallBackSearchHeroes listener);
+
+        void getSlideModels();
     }
 
     interface APIListener {
-
         void onSuccess(Response<List<Hero>> response);
+
         void onError(Response<List<Hero>> response);
+
         void onFailure(Throwable t);
     }
 
-    interface SearchListHeroListener {
+    interface CallBackSearchHeroes {
+        void onSuccessfullySearch(List<Hero> heroes);
 
-        void onSuccessfullySearch(List<Hero> heroList);
-        void onFailureSearch(List<Hero> heroList);
+        void onFailureSearch(List<Hero> heroes);
     }
 
+    interface CallBackSliderModel{
+        void onSuccess(ArrayList<SlideModel> getSlideModels);
+        void onError(String mes);
+    }
 }

@@ -1,7 +1,5 @@
 package com.example.booknews.view.screen;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,13 +9,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.booknews.R;
 
 public class SplashScreen extends AppCompatActivity {
-
-    private Animation topAnim, bottomAnim;
     private static int SPLASH_SCREEN = 5000;
 
+    private Animation topAnim, bottomAnim;
     private ImageView imgBgSplashScreen;
     private TextView txtTittleSplash,txtContentSplash;
     @Override

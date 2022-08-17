@@ -6,11 +6,10 @@
     android:layout_height="match_parent"
     tools:context=".view.screen.MainActivity">
 
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/searchView"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
@@ -26,10 +25,9 @@
     <TextView
         android:id="@+id/txtTittleMainHero"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
         android:fontFamily="sans-serif-black"
         android:padding="8dp"
         android:text="@string/title_main_hero"
@@ -45,7 +43,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toTopOf="@id/imageSlider"
         app:layout_constraintHorizontal_bias="0.0"
@@ -71,6 +69,5 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerview" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

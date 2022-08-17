@@ -3,22 +3,17 @@ package com.example.booknews.presenter.inteface;
 import com.example.booknews.model.entity.Hero;
 
 public interface DetailActivityContract {
-    interface CallBackDetailModel{
-        void setHero(Hero hero, CallBackSetHero callBackSetHero);
-    }
     interface CallBackDetailView {
         void setUpValueForView(Hero hero);
 
-        void showMessage(String msg);
+        void showMessageInView(String msg);
     }
 
     interface CallBackDetailPresenter {
-        void getHero();
-    }
+        void getHeroInPresenter(Hero hero);
 
-    interface CallBackSetHero {
-        void onSuccess(Hero hero);
+        void getHeroSuccessInPresenter(Hero hero);
 
-        void onError(String mes);
+        void getHeroFailInPresenter(String mes);
     }
 }

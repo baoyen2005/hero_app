@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HeroMainAdapter extends RecyclerView.Adapter<HeroMainAdapter.ViewHolder> {
+    private final String TAG = "HeroMainAdapter";
     private final List<Hero> heroes = new ArrayList<>();
     private final ClickShowDetailHero clickShowDetailHero;
 
@@ -40,16 +40,13 @@ public class HeroMainAdapter extends RecyclerView.Adapter<HeroMainAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Context context = holder.constraintItem.getContext();
-        if (!heroes.isEmpty()) {
-            Hero hero = heroes.get(position);
-            Glide.with(context)
-                    .load(hero.getImageurl())
-                    .into(holder.imageView);
-            holder.textView.setText(hero.getName());
-            holder.constraintItem.setOnClickListener(view -> clickShowDetailHero.openDetailHero(hero, position));
-        } else {
-            Toast.makeText(context, "List hero is empty", Toast.LENGTH_SHORT).show();
-        }
+        Log.d(TAG, "onBindViewHolder: "+ heroes.size());
+        Hero hero = heroes.get(position);
+        Glide.with(context)
+                .load(hero.getImageurl())
+                .into(holder.imageView);
+        holder.textView.setText(hero.getName());
+        holder.constraintItem.setOnClickListener(view -> clickShowDetailHero.openDetailHero(hero, position));
     }
 
     @Override
@@ -60,11 +57,12 @@ public class HeroMainAdapter extends RecyclerView.Adapter<HeroMainAdapter.ViewHo
     @SuppressLint("NotifyDataSetChanged")
     public void updateList(List<Hero> list) {
         if (list != null && !list.isEmpty()) {
-            heroes.clear();
+            if (!heroes.isEmpty()) heroes.clear();
             heroes.addAll(list);
+            Log.d(TAG, "updateList: " + heroes.size());
             notifyDataSetChanged();
         } else {
-            Log.d("adapter", "updateList: list null or heroes null");
+            Log.d(TAG, "updateList: list null or heroes null");
         }
     }
 

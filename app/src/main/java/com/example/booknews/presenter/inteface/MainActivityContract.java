@@ -10,54 +10,44 @@ import retrofit2.Response;
 
 public interface MainActivityContract {
     interface CallBackModel {
-        void getHeroes(final APIListener listener);
+        void getHeroesByGetApiInModel(CallBackMainPresenter presenter);
 
-        void getHeroesByName(String name, CallBackSearchHeroes listener);
+        void getHeroesByNameInModel(String name, CallBackMainPresenter presenter);
 
-        void getSlideModels(CallBackSliderModel callBackSliderModel);
-
+        void getSlideModelsInModel(CallBackMainPresenter presenter);
     }
 
     interface CallBackView {
-        void setupUI();
+        void displayHeroDataInView(List<Hero> heroes);
 
-        void handleEvent();
+        void showSliderInView(ArrayList<SlideModel> slideModels);
 
-        void displayHeroData(List<Hero> heroes);
+        void showMessageInView(String msg);
 
-        void setSlider(ArrayList<SlideModel> slideModels);
+        void showProgressDialogInView();
 
-        void showMessage(String msg);
-
-        void showProgressDialog();
-
-        void hideProgressDialog();
+        void hideProgressDialogInView();
     }
 
-    interface CallBackPresenter {
-        void getHeroes();
+    interface CallBackMainPresenter {
+        void getHeroesInPresenter();
 
-        void getHeroesByName(String name, CallBackSearchHeroes listener);
+        void getHeroesSuccessInPresenter(Response<List<Hero>> response);
 
-        void getSlideModels();
-    }
+        void getHeroesErrorInPresenter(String mes);
 
-    interface APIListener {
-        void onSuccess(Response<List<Hero>> response);
+        void getHeroesOnFailureInPresenter(Throwable t);
 
-        void onError(Response<List<Hero>> response);
+        void getHeroesByNameInPresenter(String name);
 
-        void onFailure(Throwable t);
-    }
+        void onSuccessfullySearchInPresenter(List<Hero> heroes);
 
-    interface CallBackSearchHeroes {
-        void onSuccessfullySearch(List<Hero> heroes);
+        void onFailureSearchInPresenter(List<Hero> heroes);
 
-        void onFailureSearch(List<Hero> heroes);
-    }
+        void getSlideModelInPresenter();
 
-    interface CallBackSliderModel{
-        void onSuccess(ArrayList<SlideModel> getSlideModels);
-        void onError(String mes);
+        void getSlideModelSuccessInPresenter(ArrayList<SlideModel> slideModels);
+
+        void getSlideModelFailInPresenter(String mes);
     }
 }

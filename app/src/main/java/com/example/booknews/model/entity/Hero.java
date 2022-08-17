@@ -5,55 +5,6 @@ import com.google.gson.annotations.SerializedName;
 import java.io.Serializable;
 
 public class Hero implements Serializable {
-    /*
-        private String category;
-        private String imageUrl;
-        private String name;
-        private String desc;
-
-
-        public Book(String category, String imageUrl, String name, String desc) {
-            this.category = category;
-            this.imageUrl = imageUrl;
-            this.name = name;
-            this.desc = desc;
-        }
-
-        public String getCategory() {
-            return category;
-        }
-
-        public void setCategory(String category) {
-            this.category = category;
-        }
-
-        public String getImageUrl() {
-            return imageUrl;
-        }
-
-        public void setImageUrl(String imageUrl) {
-            this.imageUrl = imageUrl;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public void setName(String name) {
-            this.name = name;
-        }
-
-        public String getDesc() {
-            return desc;
-        }
-
-        public void setDesc(String desc) {
-            this.desc = desc;
-        }
-
-     */
-
-
     @SerializedName("name")
     private String name;
     @SerializedName("realname")

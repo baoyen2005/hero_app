@@ -10,6 +10,7 @@ import com.example.booknews.model.entity.Hero;
 import com.example.booknews.model.network.RetrofitClass;
 import com.example.booknews.presenter.inteface.HeroApiInterface;
 import com.example.booknews.presenter.inteface.MainActivityContract;
+import com.example.booknews.utils.FunctionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,33 +19,32 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class HeroModel implements MainActivityContract.CallBackModel {
-    private final String TAG ="HeroModel";
+public class MainModel implements MainActivityContract.CallBackModel {
+    private final String TAG = "HeroModel";
     private final List<Hero> heroes = new ArrayList<>();
     private final List<Hero> list = new ArrayList<>();
     private final ArrayList<SlideModel> slideModels = new ArrayList<>();
 
     @Override
-    public void getHeroes(MainActivityContract.APIListener listener) {
+    public void getHeroesByGetApiInModel(MainActivityContract.CallBackMainPresenter presenter) {
         try {
             HeroApiInterface service = RetrofitClass.getInstance().create(HeroApiInterface.class);
             Call<List<Hero>> call = service.getAllHero();
-            Log.d("heroModel", "getHeroes: call "+ call);
             call.enqueue(new Callback<List<Hero>>() {
                 @Override
                 public void onResponse(@NonNull Call<List<Hero>> call, @NonNull Response<List<Hero>> response) {
                     if (response.isSuccessful()) {
-                        listener.onSuccess(response);
+                        presenter.getHeroesSuccessInPresenter(response);
                         assert response.body() != null;
                         heroes.addAll(response.body());
-                        Log.d(TAG, "onResponse: heroes "+heroes.size());
                     } else {
-                        listener.onError(response);
+                        presenter.getHeroesErrorInPresenter(FunctionUtils.getDataIsEmpty);
                     }
                 }
+
                 @Override
                 public void onFailure(@NonNull Call<List<Hero>> call, Throwable t) {
-                    listener.onFailure(t);
+                    presenter.getHeroesOnFailureInPresenter(t);
                 }
             });
         } catch (Exception e) {
@@ -53,34 +53,29 @@ public class HeroModel implements MainActivityContract.CallBackModel {
     }
 
     @Override
-    public void getHeroesByName(String name, MainActivityContract.CallBackSearchHeroes listener) {
-        Log.d(TAG, "getHeroesByName: heroes = "+ heroes.size());
+    public void getHeroesByNameInModel(String name, MainActivityContract.CallBackMainPresenter presenter) {
         if (name == null || name.isEmpty()) {
-            listener.onFailureSearch(heroes);
-        }
-        else {
+            presenter.onFailureSearchInPresenter(heroes);
+        } else {
             list.clear();
             for (int i = 0; i < heroes.size(); i++) {
                 if (heroes.get(i).getName().toLowerCase().contains(name.toLowerCase())) {
                     list.add(heroes.get(i));
                 }
             }
-            listener.onSuccessfullySearch(list);
+            presenter.onSuccessfullySearchInPresenter(list);
         }
     }
 
     @Override
-    public void getSlideModels(MainActivityContract.CallBackSliderModel callBackSliderModel) {
-        if(!heroes.isEmpty()){
-            Log.d("HeroModel", "getSlideModels: " + heroes.size());
+    public void getSlideModelsInModel(MainActivityContract.CallBackMainPresenter presenter) {
+        if (!heroes.isEmpty()) {
             for (Hero hero : heroes) {
                 slideModels.add(new SlideModel(hero.getImageurl(), ScaleTypes.FIT));
             }
-            callBackSliderModel.onSuccess(slideModels);
-        }
-        else{
-            Log.d("HeroModel", "getSlideModels: is empty " + heroes);
-            callBackSliderModel.onError("Heroes is empty. slideModels is fail");
+            presenter.getSlideModelSuccessInPresenter(slideModels);
+        } else {
+            presenter.getSlideModelFailInPresenter(FunctionUtils.sliderModelError);
         }
     }
 }
